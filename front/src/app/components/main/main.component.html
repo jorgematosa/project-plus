@@ -1,0 +1,13 @@
+<link
+  rel="stylesheet"
+  [href]="cssUrl"
+/>
+
+<p-dropdown
+  [options]="themes"
+  [(ngModel)]="selectedTheme"
+  placeholder="Select a theme"
+  optionLabel="name"
+  (ngModelChange)="loadStyle($event)"
+  ></p-dropdown>
+<p-calendar [(ngModel)]="date1"></p-calendar>
