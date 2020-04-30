@@ -1,4 +1,5 @@
 export interface Theme {
-  name: string;
-  url: string;
+  theme: string,
+  name: string,
+  code: string
 }

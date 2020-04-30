@@ -1,27 +1,31 @@
-import { Component} from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { Theme } from 'src/app/shared/models/theme';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
 })
-export class MainComponent {
+export class MainComponent implements OnInit {
   public date1: Date;
   public themes: Theme[] = [
-    { name: 'dark', url: '/assets/themes/luna-amber/theme.css' },
-    { name: 'light', url: '/assets/themes/rhea/theme.css' },
+    { theme: 'dark', name: 'luna-amber', code: '0' },
+    { theme: 'light', name: 'rhea', code: '1' },
+    { theme: 'dark-light', name: 'nova-dark', code: '2' },
   ];
-  public selectedTheme: Theme;
-  public cssUrl: SafeResourceUrl;
+  public selectedTheme?: Theme =
+    JSON.parse(localStorage.getItem('project-plus-theme')) || this.themes[0];
 
-  constructor(private sanitizer: DomSanitizer) {
-    this.selectedTheme = this.themes[0];
-    this.loadStyle(this.selectedTheme);
+  constructor() {}
+
+  ngOnInit(): void {
+    this.themeSwitcher();
   }
 
-  public loadStyle(style: Theme) {
-      this.cssUrl = this.sanitizer.bypassSecurityTrustResourceUrl(style.url);
+  public themeSwitcher() {
+    const link: any = document.querySelector('#theme');
+    link.href = `assets/themes/${this.selectedTheme.name}/theme.css`;
+    localStorage.setItem('project-plus-theme', JSON.stringify(this.selectedTheme));
   }
+
 }
