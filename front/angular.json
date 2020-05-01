@@ -32,6 +32,7 @@
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/flexboxgrid/css/flexboxgrid.min.css",
               "node_modules/roboto-fontface/css/roboto/roboto-fontface.css",
+              "src/app/layout/styles/index.scss",
               "src/styles.scss"
             ],
             "scripts": []
