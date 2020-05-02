@@ -9,8 +9,8 @@ import { Theme } from 'src/app/shared/models/theme';
 export class HeaderComponent implements OnInit {
   public themes: Theme[] = [
     { theme: 'dark', name: 'luna-amber', code: '0' },
-    { theme: 'light', name: 'rhea', code: '1' },
-    { theme: 'dark-light', name: 'nova-dark', code: '2' },
+    // { theme: 'light', name: 'rhea', code: '1' },
+    { theme: 'light', name: 'nova-dark', code: '2' },
   ];
   public selectedTheme?: Theme =
     JSON.parse(localStorage.getItem('project-plus-theme')) || this.themes[0];
