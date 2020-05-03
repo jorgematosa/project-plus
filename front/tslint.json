@@ -42,8 +42,9 @@
     "max-classes-per-file": false,
     "max-line-length": [
       true,
-      140
+      80
     ],
+    "ordered-imports": [true],
     "member-ordering": [
       true,
       {

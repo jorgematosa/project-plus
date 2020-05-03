@@ -7,9 +7,13 @@ import { HeaderComponent } from './header/header.component';
 import { ToolbarModule } from 'primeng/toolbar';
 import { SideMenuComponent } from './side-menu/side-menu.component';
 import { MenuModule } from 'primeng/menu';
+import { ExpensesComponent } from './expenses/expenses.component';
+import { TasksCalendarComponent } from './tasks-calendar/tasks-calendar.component';
+import { TasksComponent } from './tasks/tasks.component';
+import { EffortAnalysisComponent } from './effort-analysis/effort-analysis.component';
 
 @NgModule({
-  declarations: [MainComponent, HeaderComponent, SideMenuComponent],
+  declarations: [MainComponent, HeaderComponent, SideMenuComponent, ExpensesComponent, TasksCalendarComponent, TasksComponent, EffortAnalysisComponent],
   imports: [
     CalendarModule,
     FormsModule,
