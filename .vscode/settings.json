@@ -5,6 +5,7 @@
     "editor.wordWrapColumn": 80,
     "editor.codeActionsOnSave": {
         "source.organizeImports": true,
-        "source.fixAll": true
+        "source.fixAll": true,
+        "suppressImplicitAnyIndexErrors": true,
     }
 }
