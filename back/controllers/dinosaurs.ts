@@ -1,27 +1,26 @@
-import { v4 } from "https://deno.land/std/uuid/mod.ts";
 import { Request, Response } from "https://deno.land/x/oak/mod.ts";
-import { Dinosaurs } from "../models/dinosaurs.ts";
+import dinosaurRepo from "../repositories/dinosaurRepo.ts";
 import { Dinosaur } from "../types/types.ts";
 
 
-const getDinosaurs = ({ response }: { response: Response }) => {
+const getDinosaurs = async ({ response }: { response: Response }) => {
+  const dinosaurs: Dinosaur[] = await (await dinosaurRepo.selectAll()).rows;
   response.body = {
     success: true,
-    data: Dinosaurs,
+    data: dinosaurs,
   };
 };
 
-const getDinosaur = (
+const getDinosaur = async (
   { params, response }: { params: { id: string }; response: Response },
 ) => {
-  const selectedDino: Dinosaur | undefined = Dinosaurs.find((dino) =>
-    dino.id === params.id
-  );
-  if (selectedDino) {
+  const selectedDino: Dinosaur[] = await (await dinosaurRepo.selectById(params.id)).rows;
+
+  if (selectedDino.length === 1) {
     response.status = 200;
     response.body = {
       success: true,
-      data: selectedDino,
+      data: selectedDino[0],
     };
   } else {
     response.status = 404;
@@ -44,8 +43,7 @@ const addDinosaur = async (
   } else {
     const { value: dinosaurBody } = await request.body();
     const dinosaur: Dinosaur = await dinosaurBody;
-    dinosaur.id = v4.generate();
-    Dinosaurs.push(dinosaur);
+    await dinosaurRepo.create(dinosaur);
     response.status = 201;
     response.body = {
       success: true,
@@ -54,21 +52,18 @@ const addDinosaur = async (
   }
 };
 
-const deleteDinosaur = (
+const deleteDinosaur = async (
   { params, response }: { params: { id: string }; response: Response },
 ) => {
-  const filteredDinosaurs: Array<Dinosaur> = Dinosaurs.filter(
-    (dinosaur: Dinosaur) => (dinosaur.id !== params.id),
-  );
-  if (filteredDinosaurs.length === Dinosaurs.length) {
+  const dinosaur: Dinosaur[] = await (await dinosaurRepo.selectById(params.id)).rows;
+  if (dinosaur.length !== 1) {
     response.status = 404;
     response.body = {
       success: false,
       msg: "Not found",
     };
   } else {
-    Dinosaurs.splice(0, Dinosaurs.length);
-    Dinosaurs.push(...filteredDinosaurs);
+    await dinosaurRepo.delete(params.id);
     response.status = 200;
     response.body = {
       success: true,
@@ -84,26 +79,12 @@ const updateDinosaur = async (
     response: Response;
   },
 ) => {
-  const requestedDinosaur: Dinosaur | undefined = Dinosaurs.find(
-    (dinosaur: Dinosaur) => dinosaur.id === params.id,
-  );
-  if (requestedDinosaur) {
-    const { value: updatedDinosaurBody } = await request.body();
-    const updatedDinosaurs: Array<Dinosaur> = Dinosaurs.map(
-      (dinosaur: Dinosaur) => {
-        if (dinosaur.id === params.id) {
-          return {
-            ...dinosaur,
-            ...updatedDinosaurBody,
-          };
-        } else {
-          return dinosaur;
-        }
-      },
-    );
+  const requestedDinosaur: Dinosaur[] = await (await dinosaurRepo.selectById(params.id)).rows;
 
-    Dinosaurs.splice(0, Dinosaurs.length);
-    Dinosaurs.push(...updatedDinosaurs);
+  if (requestedDinosaur.length === 1) {
+    const { value: updatedDinosaurBody } = await request.body();
+    const updatedDinosaur: Dinosaur = await updatedDinosaurBody;
+    dinosaurRepo.update(params.id, await updatedDinosaur)
     response.status = 200;
     response.body = {
       success: true,
