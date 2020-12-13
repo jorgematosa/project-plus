@@ -7,5 +7,10 @@
         "source.organizeImports": true,
         "source.fixAll": true,
         "suppressImplicitAnyIndexErrors": true,
-    }
+    },
+    "deno.enable": true,
+    "deno.unstable": false,
+    "deno.import_intellisense_origins": {
+      "https://deno.land": true,
+    },
 }
